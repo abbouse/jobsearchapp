@@ -5,7 +5,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## 🎥 Demo
 
-[![Demo Video](https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg)](https://github.com/abbouse/jobsearchapp/assets/IMG_0462.MP4)
+[![Demo Video](https://img.youtube.com/vi/VIDEO_ID/hqdefault.jpg)](https://github.com/user-attachments/assets/7074bcdd-bd30-4d60-81f7-8168506dfb81)
 
 
 ## Get started
