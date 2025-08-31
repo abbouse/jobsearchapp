@@ -2,7 +2,6 @@ import { Feather, FontAwesome5, Ionicons, MaterialCommunityIcons, MaterialIcons 
 import React from 'react';
 import {
   Animated,
-  Button,
   Dimensions,
   Modal,
   PanResponder,
@@ -11,6 +10,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { CardData } from '../data/mockData';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -25,57 +25,66 @@ const ICON_SIZE = 22;
 const ICON_CONTAINER_SIZE = 42;
 
 const appealPointIcons: Record<string, React.ReactNode> = {
-  '交通費支給': <FontAwesome5 name="coins" size={20} color="#f4a261" />,
-  '週払いOK': <MaterialCommunityIcons name="calendar-week" size={20} color="#f4a261" />,
-  '駅近': <MaterialIcons name="train" size={20} color="#f4a261" />,
-  'まかないあり': <MaterialIcons name="restaurant" size={20} color="#f4a261" />,
-  '未経験歓迎': <FontAwesome5 name="user-plus" size={20} color="#f4a261" />,
-  'シフト調整可能': <Ionicons name="time" size={20} color="#f4a261" />,
+  traffic_expense: <FontAwesome5 name="coins" size={20} color="#8B4513" />,
+  weekly_payment: <MaterialCommunityIcons name="calendar-week" size={20} color="#8B4513" />,
+  near_station: <MaterialIcons name="train" size={20} color="#8B4513" />,
+  meals_provided: <MaterialIcons name="restaurant" size={20} color="#8B4513" />,
+  no_experience: <FontAwesome5 name="user-plus" size={20} color="#8B4513" />,
+  flexible_shifts: <Ionicons name="time" size={20} color="#8B4513" />,
+  uniform_provided: <MaterialIcons name="work" size={20} color="#8B4513" />,
+  employee_discount: <FontAwesome5 name="percentage" size={20} color="#8B4513" />,
+  high_income: <MaterialIcons name="attach-money" size={20} color="#8B4513" />,
+  experienced_preferred: <FontAwesome5 name="user-check" size={20} color="#8B4513" />,
+  qualification_allowance: <MaterialIcons name="verified" size={20} color="#8B4513" />,
+  stable_employment: <MaterialIcons name="business" size={20} color="#8B4513" />,
+  weekends_only: <MaterialCommunityIcons name="calendar-weekend" size={20} color="#8B4513" />,
 };
 
 // Haftaning kunlari va ularning yaponcha birinchi kanjisi
 const daysOfWeek = [
-  { en: 'Mon', jp: '月' },
-  { en: 'Tue', jp: '火' },
-  { en: 'Wed', jp: '水' },
-  { en: 'Thu', jp: '木' },
-  { en: 'Fri', jp: '金' },
-  { en: 'Sat', jp: '土' },
-  { en: 'Sun', jp: '日' },
-];
-
-const iconRows = [
-  {
-    icon: (color: string) => <Feather name="clipboard" size={ICON_SIZE} color={color} />,
-    value: (card: CardData) => card.category,
-    info: 'Ish turi (kategoriya)',
-  },
-  {
-    icon: (color: string) => <Feather name="dollar-sign" size={ICON_SIZE} color={color} />,
-    value: (card: CardData) => card.salary,
-    info: 'Ish haqi',
-  },
-  {
-    icon: (color: string) => <Ionicons name="language" size={ICON_SIZE} color={color} />,
-    value: (card: CardData) => card.languageLevel,
-    info: 'Yapon tili darajasi',
-  },
-  {
-    icon: (color: string) => <Ionicons name="walk" size={ICON_SIZE} color={color} />,
-    value: (card: CardData) => card.commuteTime,
-    info: 'Ishgacha yurish vaqti',
-  },
-  {
-    icon: (color: string) => <MaterialIcons name="train" size={ICON_SIZE} color={color} />,
-    value: (card: CardData) => card.station,
-    info: 'Eng yaqin stansiya',
-  },
+  { en: 'MON', jp: '月' },
+  { en: 'TUE', jp: '火' },
+  { en: 'WED', jp: '水' },
+  { en: 'THU', jp: '木' },
+  { en: 'FRI', jp: '金' },
+  { en: 'SAT', jp: '土' },
+  { en: 'SUN', jp: '日' },
 ];
 
 const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
+  const { t } = useTranslation();
   const pan = React.useRef(new Animated.ValueXY()).current;
   const [modalVisible, setModalVisible] = React.useState(false);
   const [modalText, setModalText] = React.useState('');
+
+  // iconRows ni tarjima bilan yangilash
+  const iconRows = [
+    {
+      icon: (color: string) => <Feather name="clipboard" size={ICON_SIZE} color={color} />,
+      value: (card: CardData) => t(card.category),
+      info: t('category'),
+    },
+    {
+      icon: (color: string) => <Feather name="dollar-sign" size={ICON_SIZE} color={color} />,
+      value: (card: CardData) => card.salary,
+      info: t('salary'),
+    },
+    {
+      icon: (color: string) => <Ionicons name="language" size={ICON_SIZE} color={color} />,
+      value: (card: CardData) => card.languageLevel,
+      info: t('japanese_level'),
+    },
+    {
+      icon: (color: string) => <Ionicons name="walk" size={ICON_SIZE} color={color} />,
+      value: (card: CardData) => card.commuteTime,
+      info: t('commute_time'),
+    },
+    {
+      icon: (color: string) => <MaterialIcons name="train" size={ICON_SIZE} color={color} />,
+      value: (card: CardData) => card.station,
+      info: t('station'),
+    },
+  ];
 
   // Opacity for like/nope
   const likeOpacity = pan.x.interpolate({
@@ -161,7 +170,7 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
           { opacity: likeOpacity, transform: [{ rotate: '-20deg' }] },
         ]}
       >
-        <Text style={[styles.stampText, { color: '#4caf50' }]}>Choose</Text>
+        <Text style={[styles.stampText, { color: '#4caf50' }]}>{t('choose')}</Text>
       </Animated.View>
 
       {/* REFUSAL stamp */}
@@ -172,82 +181,82 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
           { opacity: nopeOpacity, transform: [{ rotate: '20deg' }] },
         ]}
       >
-        <Text style={[styles.stampText, { color: '#ff4d4d' }]}>Refusal</Text>
+        <Text style={[styles.stampText, { color: '#ff4d4d' }]}>{t('refusal')}</Text>
       </Animated.View>
 
       {/* Card Content */}
       <View style={styles.card}>
         <View style={styles.content}>
-          {/* Title row (faqat title) */}
+          {/* Title row */}
           <View style={styles.row}>
-            <Text style={styles.title}>{card.title}</Text>
+            <Text style={styles.title}>{t(card.title)}</Text>
           </View>
 
-          {/* Category row (kategoriya va ishlar ro'yxati iconi bir qatorda) */}
-          <View style={[styles.row, { justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#eee' }]}>
+          {/* Category row */}
+          <View style={[styles.row, { justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#D2B48C' }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={styles.iconBadgeContainer}>
                 <TouchableOpacity
                   style={styles.iconContainer}
                   onPress={() => {
-                    setModalText('Kategoriya: ' + card.category);
+                    setModalText(`${t('category')}: ${t(card.category)}`);
                     setModalVisible(true);
                   }}
                 >
-                  <Feather name="clipboard" size={ICON_SIZE} color="#fff" />
+                  <Feather name="clipboard" size={ICON_SIZE} color="#8B4513" />
                   <TouchableOpacity
                     style={styles.infoBadge}
                     onPress={() => {
-                      setModalText('Kategoriya: ' + card.category);
+                      setModalText(`${t('category')}: ${t(card.category)}`);
                       setModalVisible(true);
                     }}
                   >
-                    <Ionicons name="information-circle" size={18} color="#2196f3" />
+                    <Ionicons name="information-circle" size={18} color="#8B4513" />
                   </TouchableOpacity>
                 </TouchableOpacity>
               </View>
-              <Text style={styles.text}>{card.category}</Text>
+              <Text style={styles.text}>{t(card.category)}</Text>
             </View>
             <TouchableOpacity
               style={styles.iconContainer}
               onPress={() => {
-                setModalText('Ishlar roʻyxati');
+                setModalText(t('job_list'));
                 setModalVisible(true);
               }}
             >
-              <FontAwesome5 name="list-ul" size={22} color="#fff" />
+              <FontAwesome5 name="list-ul" size={22} color="#8B4513" />
               <TouchableOpacity
                 style={styles.infoBadge}
                 onPress={() => {
-                  setModalText('Ishlar roʻyxati');
+                  setModalText(t('job_list'));
                   setModalVisible(true);
                 }}
               >
-                <Ionicons name="information-circle" size={18} color="#2196f3" />
+                <Ionicons name="information-circle" size={18} color="#8B4513" />
               </TouchableOpacity>
             </TouchableOpacity>
           </View>
 
-          {/* Salary + Japanese level in one row */}
-          <View style={[styles.row, { justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#eee' }]}>
+          {/* Salary + Japanese level */}
+          <View style={[styles.row, { justifyContent: 'space-between', borderBottomWidth: 1, borderBottomColor: '#D2B48C' }]}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <View style={styles.iconBadgeContainer}>
                 <TouchableOpacity
                   style={styles.iconContainer}
                   onPress={() => {
-                    setModalText('Ish haqi');
+                    setModalText(t('salary'));
                     setModalVisible(true);
                   }}
                 >
-                  <Feather name="dollar-sign" size={ICON_SIZE} color="#fff" />
+                  <Feather name="dollar-sign" size={ICON_SIZE} color="#8B4513" />
                   <TouchableOpacity
                     style={styles.infoBadge}
                     onPress={() => {
-                      setModalText('Ish haqi');
+                      setModalText(t('salary'));
                       setModalVisible(true);
                     }}
                   >
-                    <Ionicons name="information-circle" size={18} color="#2196f3" />
+                    <Ionicons name="information-circle" size={18} color="#8B4513" />
                   </TouchableOpacity>
                 </TouchableOpacity>
               </View>
@@ -258,19 +267,19 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
                 <TouchableOpacity
                   style={styles.iconContainer}
                   onPress={() => {
-                    setModalText('Yapon tili darajasi');
+                    setModalText(t('japanese_level'));
                     setModalVisible(true);
                   }}
                 >
-                  <Ionicons name="language" size={ICON_SIZE} color="#fff" />
+                  <Ionicons name="language" size={ICON_SIZE} color="#8B4513" />
                   <TouchableOpacity
                     style={styles.infoBadge}
                     onPress={() => {
-                      setModalText('Yapon tili darajasi');
+                      setModalText(t('japanese_level'));
                       setModalVisible(true);
                     }}
                   >
-                    <Ionicons name="information-circle" size={18} color="#2196f3" />
+                    <Ionicons name="information-circle" size={18} color="#8B4513" />
                   </TouchableOpacity>
                 </TouchableOpacity>
               </View>
@@ -283,7 +292,7 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
                       style={[
                         styles.languageCircle,
                         {
-                          backgroundColor: isActive ? '#2196f3' : '#A9A9A9',
+                          backgroundColor: isActive ? '#8B4513' : '#A9A9A9',
                         },
                       ]}
                     />
@@ -297,25 +306,25 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
             </View>
           </View>
 
-          {/* Commute time row with icons and dividers */}
-          <View style={[styles.row, { justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#eee' }]}>
+          {/* Commute time row */}
+          <View style={[styles.row, { justifyContent: 'flex-start', alignItems: 'center', borderBottomWidth: 1, borderBottomColor: '#D2B48C' }]}>
             <View style={styles.iconBadgeContainer}>
               <TouchableOpacity
                 style={styles.iconContainer}
                 onPress={() => {
-                  setModalText('Ishgacha yurish vaqti');
+                  setModalText(t('commute_time'));
                   setModalVisible(true);
                 }}
               >
-                <Ionicons name="walk" size={ICON_SIZE} color="#fff" />
+                <Ionicons name="walk" size={ICON_SIZE} color="#8B4513" />
                 <TouchableOpacity
                   style={styles.infoBadge}
                   onPress={() => {
-                    setModalText('Ishgacha yurish vaqti');
+                    setModalText(t('commute_time'));
                     setModalVisible(true);
                   }}
                 >
-                  <Ionicons name="information-circle" size={18} color="#2196f3" />
+                  <Ionicons name="information-circle" size={18} color="#8B4513" />
                 </TouchableOpacity>
               </TouchableOpacity>
             </View>
@@ -324,22 +333,22 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
               <TouchableOpacity
                 style={[styles.iconContainer, styles.smallIconContainer]}
                 onPress={() => {
-                  setModalText('Velosiped');
+                  setModalText(t('bicycle'));
                   setModalVisible(true);
                 }}
               >
-                <MaterialCommunityIcons name="bike" size={20} color="#fff" />
+                <MaterialCommunityIcons name="bike" size={20} color="#8B4513" />
               </TouchableOpacity>
             </View>
             <View style={[styles.iconBadgeContainer, { marginLeft: 8 }]}>
               <TouchableOpacity
                 style={[styles.iconContainer, styles.smallIconContainer]}
                 onPress={() => {
-                  setModalText('Parking');
+                  setModalText(t('parking'));
                   setModalVisible(true);
                 }}
               >
-                <MaterialCommunityIcons name="parking" size={20} color="#fff" />
+                <MaterialCommunityIcons name="parking" size={20} color="#8B4513" />
               </TouchableOpacity>
             </View>
             <View style={styles.dividerVertical} />
@@ -347,19 +356,19 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
               <TouchableOpacity
                 style={styles.iconContainer}
                 onPress={() => {
-                  setModalText('Stansiya: ' + card.station);
+                  setModalText(`${t('station')}: ${card.station}`);
                   setModalVisible(true);
                 }}
               >
-                <MaterialIcons name="train" size={ICON_SIZE} color="#fff" />
+                <MaterialIcons name="train" size={ICON_SIZE} color="#8B4513" />
                 <TouchableOpacity
                   style={styles.infoBadge}
                   onPress={() => {
-                    setModalText('Stansiya: ' + card.station);
+                    setModalText(`${t('station')}: ${card.station}`);
                     setModalVisible(true);
                   }}
                 >
-                  <Ionicons name="information-circle" size={18} color="#2196f3" />
+                  <Ionicons name="information-circle" size={18} color="#8B4513" />
                 </TouchableOpacity>
               </TouchableOpacity>
             </View>
@@ -372,19 +381,19 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
               <TouchableOpacity
                 style={styles.iconContainer}
                 onPress={() => {
-                  setModalText('Ish kunlari haqida ma‘lumot');
+                  setModalText(t('working_days_info'));
                   setModalVisible(true);
                 }}
               >
-                <MaterialIcons name="calendar-today" size={ICON_SIZE} color="#fff" />
+                <MaterialIcons name="calendar-today" size={ICON_SIZE} color="#8B4513" />
                 <TouchableOpacity
                   style={styles.infoBadge}
                   onPress={() => {
-                    setModalText('Ish kunlari haqida ma‘lumot');
+                    setModalText(t('working_days_info'));
                     setModalVisible(true);
                   }}
                 >
-                  <Ionicons name="information-circle" size={18} color="#2196f3" />
+                  <Ionicons name="information-circle" size={18} color="#8B4513" />
                 </TouchableOpacity>
               </TouchableOpacity>
             </View>
@@ -396,7 +405,7 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
                   style={[
                     styles.dayBadge,
                     {
-                      backgroundColor: isWorkingDay ? '#f4a261' : '#A9A9A9',
+                      backgroundColor: isWorkingDay ? '#D2B48C' : '#A9A9A9',
                     },
                   ]}
                 >
@@ -409,61 +418,60 @@ const SwipeCard: React.FC<Props> = ({ card, onSwipe, onSwipeProgress }) => {
 
           {/* Work Hours */}
           <View style={styles.workHoursContainer}>
-            <Ionicons name="time-outline" size={ICON_SIZE} color="#888" />
-            <Text style={styles.workHoursText}>{card.workHours || '6:00 - 18:00'}</Text>
+            <Ionicons name="time-outline" size={ICON_SIZE} color="#8B4513" />
+            <Text style={styles.workHoursText}>{card.workHours || t('default_work_hours')}</Text>
           </View>
 
           {/* Appeal Points Icons */}
-<View style={styles.appealIconWrapper}>
-  <View style={styles.iconBadgeContainer}>
+          <View style={styles.appealIconWrapper}>
+            <View style={styles.iconBadgeContainer}>
               <TouchableOpacity
                 style={styles.iconContainer}
                 onPress={() => {
-                  setModalText('Attractiveness of the workplace that X you want to highlight\nThis is an explanation of the icon of the company\'s appeal point.');
+                  setModalText(t('appeal_points_info'));
                   setModalVisible(true);
                 }}
               >
-                <MaterialIcons name="star" size={ICON_SIZE} color="#fff" />
+                <MaterialIcons name="star" size={ICON_SIZE} color="#8B4513" />
                 <TouchableOpacity
                   style={styles.infoBadge}
                   onPress={() => {
-                    setModalText('Attractiveness of the workplace that X you want to highlight\nThis is an explanation of the icon of the company\'s appeal point.');
+                    setModalText(t('appeal_points_info'));
                     setModalVisible(true);
                   }}
                 >
-                  <Ionicons name="information-circle" size={18} color="#2196f3" />
+                  <Ionicons name="information-circle" size={18} color="#8B4513" />
                 </TouchableOpacity>
               </TouchableOpacity>
             </View>
-  {card.appealPoints.map((point, idx) => (
-    <View key={idx} style={styles.appealIconItem}>
-      {appealPointIcons[point] || <Text style={{ fontSize: 16 }}>⭐</Text>}
-    </View>
-  ))}
-</View>
-
+            {card.appealPoints.map((point, idx) => (
+              <View key={idx} style={styles.appealIconItem}>
+                {appealPointIcons[point] || <Text style={{ fontSize: 16, color: '#8B4513' }}>{t(point)}</Text>}
+              </View>
+            ))}
+          </View>
         </View>
       </View>
-      <Modal
-  visible={modalVisible}
-  transparent
-  animationType="fade"
-  onRequestClose={() => setModalVisible(false)}
->
-  <View style={styles.modalOverlay}>
-    <View style={styles.modalContentBox}>
-      {/* Close Icon */}
-      <TouchableOpacity
-        style={styles.modalCloseIcon}
-        onPress={() => setModalVisible(false)}
-      >
-        <Ionicons name="close" size={24} color="#333" />
-      </TouchableOpacity>
 
-      <Text style={{ fontSize: 16, marginBottom: 12 }}>{modalText}</Text>
-    </View>
-  </View>
-</Modal>
+      {/* Modal */}
+      <Modal
+        visible={modalVisible}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContentBox}>
+            <TouchableOpacity
+              style={styles.modalCloseIcon}
+              onPress={() => setModalVisible(false)}
+            >
+              <Ionicons name="close" size={24} color="#8B4513" />
+            </TouchableOpacity>
+            <Text style={styles.modalText}>{modalText}</Text>
+          </View>
+        </View>
+      </Modal>
     </Animated.View>
   );
 };
@@ -476,33 +484,37 @@ const styles = StyleSheet.create({
   },
   card: {
     padding: 6,
-    borderRadius: 14,
-    backgroundColor: '#fff',
-    elevation: 5,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 4 },
+    borderRadius: 12,
+    backgroundColor: '#FFF8E1',
+    borderWidth: 1,
+    borderColor: '#D2B48C',
+    elevation: 8,
+    shadowColor: '#8B4513',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 2, height: 4 },
+    shadowRadius: 6,
     overflow: 'hidden',
   },
   content: {
     padding: 12,
+    backgroundColor: 'transparent',
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: '600',
+    color: '#4A2F0B',
     marginBottom: 6,
+    fontFamily: 'Georgia',
   },
   text: {
     fontSize: 14,
-    color: '#333',
+    color: '#4A2F0B',
     marginLeft: 6,
-    fontWeight: 'bold',
+    fontWeight: '600',
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
     paddingVertical: 25,
     marginBottom: 4,
   },
@@ -515,20 +527,22 @@ const styles = StyleSheet.create({
   dayBadge: {
     width: 35,
     height: 35,
-    borderRadius: 25,
+    borderRadius: 8,
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 2,
     paddingVertical: 2,
+    borderWidth: 0.5,
+    borderColor: '#D2B48C',
   },
   dayText: {
     fontSize: 12,
-    color: '#fff',
+    color: '#FFF8E1',
     fontWeight: 'bold',
   },
   dayJpText: {
     fontSize: 8,
-    color: '#fff',
+    color: '#FFF8E1',
   },
   stamp: {
     position: 'absolute',
@@ -540,6 +554,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent',
+    borderColor: '#D2B48C',
     zIndex: 999,
   },
   stampText: {
@@ -563,12 +578,14 @@ const styles = StyleSheet.create({
     width: ICON_CONTAINER_SIZE,
     height: ICON_CONTAINER_SIZE,
     borderRadius: ICON_CONTAINER_SIZE / 2,
-    backgroundColor: '#2196f3',
+    backgroundColor: '#DEB887',
     justifyContent: 'center',
     alignItems: 'center',
     marginRight: 5,
     position: 'relative',
     padding: 6,
+    borderWidth: 0.5,
+    borderColor: '#D2B48C',
   },
   smallIconContainer: {
     width: 32,
@@ -581,11 +598,13 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -6,
     right: -6,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF8E1',
     borderRadius: 12,
     padding: 2,
     elevation: 2,
     zIndex: 10,
+    borderWidth: 0.5,
+    borderColor: '#D2B48C',
   },
   modalOverlay: {
     flex: 1,
@@ -594,11 +613,28 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   modalContentBox: {
-    backgroundColor: '#fff',
+    backgroundColor: '#FFF8E1',
     borderRadius: 12,
     padding: 24,
     minWidth: 220,
     alignItems: 'center',
+    borderWidth: 1,
+    borderColor: '#D2B48C',
+    elevation: 5,
+    shadowColor: '#8B4513',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 2, height: 4 },
+  },
+  modalText: {
+    fontSize: 16,
+    color: '#4A2F0B',
+    marginBottom: 12,
+    textAlign: 'center',
+  },
+  modalCloseIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
   },
   workHoursContainer: {
     flexDirection: 'row',
@@ -608,19 +644,19 @@ const styles = StyleSheet.create({
   },
   workHoursText: {
     fontSize: 14,
-    color: '#333',
+    color: '#4A2F0B',
     marginLeft: 6,
   },
   divider: {
     height: 1,
-    backgroundColor: '#eee',
+    backgroundColor: '#D2B48C',
     marginVertical: 8,
     width: '100%',
   },
   dividerVertical: {
     width: 1,
     height: 40,
-    backgroundColor: '#eee',
+    backgroundColor: '#D2B48C',
     marginHorizontal: 8,
   },
   languageChainContainer: {
@@ -644,7 +680,7 @@ const styles = StyleSheet.create({
     top: -20,
     left: -3,
     fontSize: 12,
-    color: '#2196f3',
+    color: '#8B4513',
     fontWeight: 'bold',
   },
   connectorLine: {
@@ -654,20 +690,21 @@ const styles = StyleSheet.create({
     marginHorizontal: 2,
   },
   appealIconWrapper: {
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  gap: 10,
-  marginTop: 12,
-},
-
-appealIconItem: {
-  width: 36,
-  height: 36,
-  borderRadius: 18,
-  backgroundColor: '#fcefe3',
-  justifyContent: 'center',
-  alignItems: 'center',
-},
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 10,
+    marginTop: 12,
+  },
+  appealIconItem: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#F5F5DC',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 0.5,
+    borderColor: '#D2B48C',
+  },
 });
 
 export default SwipeCard;

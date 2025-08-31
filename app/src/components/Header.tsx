@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -8,6 +8,8 @@ import {
   Dimensions,
 } from 'react-native';
 import { Ionicons, Feather } from '@expo/vector-icons';
+import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 interface HeaderProps {
   onFilterPress: () => void;
@@ -20,7 +22,13 @@ export default function Header({
   onDetailPress,
   onSharePress,
 }: HeaderProps) {
+  const { t, i18n } = useTranslation();
   const [menuVisible, setMenuVisible] = useState(false);
+
+  // Til o'zgarishini kuzatish uchun useEffect
+  useEffect(() => {
+    console.log('Current language:', i18n.language);
+  }, [i18n.language]);
 
   return (
     <View>
@@ -30,7 +38,7 @@ export default function Header({
           <Ionicons name="menu" size={28} color="black" />
         </TouchableOpacity>
 
-        <Text style={styles.title}>Job list</Text>
+        <Text style={styles.title}>{t('job_list')}</Text>
 
         <View style={styles.iconGroup}>
           <TouchableOpacity onPress={onFilterPress} style={styles.icon}>
@@ -50,9 +58,27 @@ export default function Header({
         <TouchableWithoutFeedback onPress={() => setMenuVisible(false)}>
           <View style={styles.fullScreenOverlay}>
             <View style={styles.dropdown}>
-              <Text style={styles.dropdownItem}>👤 Profil</Text>
-              <Text style={styles.dropdownItem}>⚙ Sozlamalar</Text>
-              <Text style={styles.dropdownItem}>🚪 Chiqish</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  setMenuVisible(false);
+                  router.push('/pages/editProfile');
+                }}
+              >
+                <Text style={styles.dropdownItem}>{t('profile')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => {
+                  setMenuVisible(false);
+                  router.push('/pages/lang'); // Til sahifasiga yo'naltirish
+                }}
+              >
+                <Text style={styles.dropdownItem}>{t('change_language')}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => setMenuVisible(false)}
+              >
+                <Text style={styles.dropdownItem}>{t('logout')}</Text>
+              </TouchableOpacity>
             </View>
           </View>
         </TouchableWithoutFeedback>
@@ -87,16 +113,19 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     position: 'absolute',
-    top: 80,
+    top: 100,
     left: 10,
     backgroundColor: 'white',
     padding: 10,
     elevation: 5,
     borderRadius: 6,
     width: 180,
+    zIndex: 9999,
   },
   dropdownItem: {
     paddingVertical: 6,
+    fontSize: 16,
+    color: '#333',
   },
   fullScreenOverlay: {
     position: 'absolute',
@@ -104,7 +133,7 @@ const styles = StyleSheet.create({
     left: 0,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    backgroundColor: 'rgba(0,0,0,0.05)', // optional darkening
+    backgroundColor: 'rgba(0,0,0,0.05)',
     zIndex: 5,
   },
 });

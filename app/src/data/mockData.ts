@@ -1,58 +1,138 @@
-// This file is not a React component and should not be treated as a route.
-// It only exports data for use in other components.
-
 export interface CardData {
   id: string;
-  title: string;
-  category: string;
+  title: string; // Tarjima kaliti
+  category: string; // Tarjima kaliti
   salary: string;
   languageLevel: string;
   commuteTime: string;
   workingDays: string[];
   workHours: string;
-  appealPoints: string[];
+  appealPoints: string[]; // Tarjima kalitlari
   station: string;
   image?: string;
+  employmentType: string; // Tarjima kaliti
+  employmentPeriod: string; // Tarjima kaliti
 }
 
 export const cards: CardData[] = [
   {
     id: '1',
-    title: '【倉庫】軽作業',
-    category: 'Sorting',
-    salary: '¥1,078〜¥1,130',
+    title: 'warehouse_light_work',
+    category: 'sorting',
+    salary: 'hourly ¥1,078〜¥1,130',
     languageLevel: 'N3',
-    commuteTime: '? min',
+    commuteTime: '20 min',
     workingDays: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
     workHours: '6:00 - 17:00',
-    appealPoints: ['シフト調整可能', '未経験歓迎'],
+    appealPoints: ['flexible_shifts', 'no_experience'],
     station: 'todakouenn',
     image: 'https://via.placeholder.com/300x200.png?text=Light+Work',
+    employmentType: 'part_time',
+    employmentPeriod: 'short_term',
   },
   {
     id: '2',
-    title: '【工場】部品製造',
-    category: 'Manufacturing',
-    salary: '¥1,200〜¥1,500',
+    title: 'factory_parts_manufacturing',
+    category: 'manufacturing',
+    salary: 'hourly ¥1,200〜¥1,500',
     languageLevel: 'N2',
     commuteTime: '30 min',
     workingDays: ['MON', 'TUE', 'WED', 'THU'],
     workHours: '6:00 - 18:00',
-    appealPoints: ['交通費支給', '週払いOK'],
+    appealPoints: ['traffic_expense', 'weekly_payment'],
     station: 'shinjuku',
     image: 'https://via.placeholder.com/300x200.png?text=Factory+Job',
+    employmentType: 'full_time',
+    employmentPeriod: 'long_term',
   },
   {
     id: '3',
-    title: '【飲食】ホールスタッフ',
-    category: 'Hospitality',
-    salary: '¥1,000〜¥1,200',
+    title: 'restaurant_waiter',
+    category: 'hospitality',
+    salary: 'hourly ¥1,000〜¥1,200',
     languageLevel: 'N4',
     commuteTime: '15 min',
     workingDays: ['FRI', 'SAT', 'SUN'],
     workHours: '6:00 - 18:00',
-    appealPoints: ['まかないあり', '駅近'],
+    appealPoints: ['meals_provided', 'near_station'],
     station: 'ikebukuro',
     image: 'https://via.placeholder.com/300x200.png?text=Restaurant+Job',
+    employmentType: 'part_time',
+    employmentPeriod: 'short_term',
+  },
+  {
+    id: '4',
+    title: 'retail_salesperson',
+    category: 'retail',
+    salary: 'hourly ¥1,100〜¥1,300',
+    languageLevel: 'N3',
+    commuteTime: '25 min',
+    workingDays: ['WED', 'THU', 'FRI', 'SAT'],
+    workHours: '9:00 - 17:00',
+    appealPoints: ['uniform_provided', 'employee_discount'],
+    station: 'shibuya',
+    image: 'https://via.placeholder.com/300x200.png?text=Retail+Job',
+    employmentType: 'part_time',
+    employmentPeriod: 'long_term',
+  },
+  {
+    id: '5',
+    title: 'construction_worker',
+    category: 'construction',
+    salary: 'daily ¥8,000〜¥10,000',
+    languageLevel: 'N5',
+    commuteTime: '40 min',
+    workingDays: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
+    workHours: '7:00 - 16:00',
+    appealPoints: ['high_income', 'experienced_preferred'],
+    station: 'yokohama',
+    image: 'https://via.placeholder.com/300x200.png?text=Construction+Job',
+    employmentType: 'contractor',
+    employmentPeriod: 'short_term',
+  },
+  {
+    id: '6',
+    title: 'restaurant_kitchen_staff',
+    category: 'hospitality',
+    salary: 'hourly ¥1,150〜¥1,400',
+    languageLevel: 'N3',
+    commuteTime: '10 min',
+    workingDays: ['MON', 'WED', 'FRI', 'SUN'],
+    workHours: '10:00 - 22:00',
+    appealPoints: ['meals_provided', 'flexible_shifts'],
+    station: 'roppongi',
+    image: 'https://via.placeholder.com/300x200.png?text=Kitchen+Job',
+    employmentType: 'part_time',
+    employmentPeriod: 'long_term',
+  },
+  {
+    id: '7',
+    title: 'warehouse_forklift',
+    category: 'sorting',
+    salary: 'hourly ¥1,500〜¥1,800',
+    languageLevel: 'N2',
+    commuteTime: '35 min',
+    workingDays: ['MON', 'TUE', 'WED', 'THU', 'FRI'],
+    workHours: '8:00 - 17:00',
+    appealPoints: ['qualification_allowance', 'stable_employment'],
+    station: 'kawasaki',
+    image: 'https://via.placeholder.com/300x200.png?text=Forklift+Job',
+    employmentType: 'full_time',
+    employmentPeriod: 'long_term',
+  },
+  {
+    id: '8',
+    title: 'retail_cashier',
+    category: 'retail',
+    salary: 'hourly ¥1,000〜¥1,200',
+    languageLevel: 'N4',
+    commuteTime: '15 min',
+    workingDays: ['SAT', 'SUN'],
+    workHours: '12:00 - 20:00',
+    appealPoints: ['weekends_only', 'no_experience'],
+    station: 'ueno',
+    image: 'https://via.placeholder.com/300x200.png?text=Cashier+Job',
+    employmentType: 'part_time',
+    employmentPeriod: 'short_term',
   },
 ];
