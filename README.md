@@ -5,7 +5,7 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 ## 🎥 Demo
 
-[![Demo Video](https://github.com/user-attachments/assets/7074bcdd-bd30-4d60-81f7-8168506dfb81)](https://github.com/user-attachments/assets/7074bcdd-bd30-4d60-81f7-8168506dfb81)
+[![Demo Video](https://github.com/user-attachments/assets/31e69298-1c95-4b32-adf8-282af653d19f)](https://github.com/user-attachments/assets/31e69298-1c95-4b32-adf8-282af653d19f)
 
 
 ## Get started
